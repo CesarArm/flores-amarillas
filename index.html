@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flores Amarillas para Ti</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fef3c7, #fed7aa, #fef3c7);
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+            z-index: 20;
+        }
+
+        /* Animaciones */
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40%, 43% {
+                transform: translateY(-10px);
+            }
+            70% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.75);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Flores de fondo */
+        .bg-flower {
+            position: absolute;
+            opacity: 0.15;
+            animation: pulse 4s infinite;
+            pointer-events: none;
+        }
+
+        /* Pétalos flotantes */
+        .petal {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #fcd34d;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: bounce 3s infinite;
+            top: -10px;
+        }
+
+        /* Arreglo floral */
+        .flower-arrangement {
+            margin-bottom: 3rem;
+            animation: scaleIn 1.5s ease-out 0.8s both;
+        }
+
+        .vase {
+            width: 8rem;
+            height: 5rem;
+            background: linear-gradient(to bottom, #fef3c7, #fed7aa);
+            margin: 0 auto;
+            border-radius: 1.5rem 1.5rem 0 0;
+            border: 4px solid #f59e0b;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .vase-base {
+            width: 9rem;
+            height: 2rem;
+            background: linear-gradient(to bottom, #fed7aa, #f59e0b);
+            margin: -8px auto 0;
+            border-radius: 0 0 1rem 1rem;
+            border: 4px solid #d97706;
+        }
+
+        .stems {
+            position: absolute;
+            bottom: 4rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .stem {
+            width: 8px;
+            background-color: #16a34a;
+            border-radius: 4px;
+            position: absolute;
+        }
+
+        .sunflower-container {
+            position: absolute;
+            top: -3rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .sunflower {
+            position: relative;
+        }
+
+        .sunflower-petal {
+            position: absolute;
+            background-color: #fbbf24;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .sunflower-center {
+            background-color: #92400e;
+            border-radius: 50%;
+            border: 2px solid #451a03;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Sunflower central */
+        .sunflower-main {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+        }
+
+        .sunflower-main .sunflower-petal {
+            width: 24px;
+            height: 12px;
+        }
+
+        .sunflower-main .sunflower-center {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Sunflowers laterales */
+        .sunflower-left {
+            position: absolute;
+            left: 2rem;
+            top: 1rem;
+            transform: rotate(-12deg);
+        }
+
+        .sunflower-right {
+            position: absolute;
+            right: 2rem;
+            top: 1rem;
+            transform: rotate(12deg);
+        }
+
+        .sunflower-left .sunflower-petal,
+        .sunflower-right .sunflower-petal {
+            width: 16px;
+            height: 8px;
+        }
+
+        .sunflower-left .sunflower-center,
+        .sunflower-right .sunflower-center {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Título */
+        .title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .title h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .title p {
+            font-size: 1.25rem;
+            color: #b45309;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Mensaje */
+        .message {
+            max-width: 32rem;
+            margin: 0 auto;
+            text-align: center;
+            animation: fadeInUp 1s ease-out 1.8s both;
+        }
+
+        .message-box {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            backdrop-filter: blur(8px);
+            border: 2px solid #fcd34d;
+        }
+
+        .message-text {
+            font-size: 1.125rem;
+            color: #1f2937;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .flower-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 1.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .flower-icons span {
+            animation: bounce 2s infinite;
+        }
+
+        .signature {
+            border-top: 1px solid #fcd34d;
+            padding-top: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .signature p:first-child {
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .signature p:last-child {
+            color: #92400e;
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+
+        /* Botón */
+        .btn {
+            margin-top: 2rem;
+            background: linear-gradient(45deg, #eab308, #f59e0b);
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 1.125rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #ca8a04, #d97706);
+            transform: scale(1.05);
+        }
+
+        /* Decoraciones de fondo */
+        .bg-decoration {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 8rem;
+            background: linear-gradient(to top, rgba(252, 211, 77, 0.3), transparent);
+            pointer-events: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .title h1 {
+                font-size: 2rem;
+            }
+            .message-text {
+                font-size: 1rem;
+            }
+            .container {
+                padding: 1rem;
+            }
+        }
+
+        /* Instrucciones para personalizar */
+        .instructions {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #666;
+            max-width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .close-instructions {
+            float: right;
+            cursor: pointer;
+            font-weight: bold;
+            color: #999;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Instrucciones -->
+    <div class="instructions" id="instructions">
+        <span class="close-instructions" onclick="document.getElementById('instructions').style.display='none'">×</span>
+        <strong>💡 Cómo personalizar:</strong><br>
+        Agrega a la URL: <code>?nombre=Ana&de=Carlos&mensaje=Eres especial</code><br>
+        <small>Ejemplo: mienlace.com<strong>?nombre=Ana&de=Carlos&mensaje=Eres especial</strong></small>
+    </div>
+
+    <!-- Flores de fondo -->
+    <div class="bg-flower" style="left: 5%; top: 10%; font-size: 60px;">🌻</div>
+    <div class="bg-flower" style="left: 95%; top: 10%; font-size: 50px;">🌼</div>
+    <div class="bg-flower" style="left: 5%; top: 90%; font-size: 55px;">💛</div>
+    <div class="bg-flower" style="left: 95%; top: 90%; font-size: 65px;">🌻</div>
+    <div class="bg-flower" style="left: 2%; top: 30%; font-size: 45px;">🌼</div>
+    <div class="bg-flower" style="left: 98%; top: 35%; font-size: 50px;">🌻</div>
+    <div class="bg-flower" style="left: 3%; top: 60%; font-size: 40px;">💛</div>
+    <div class="bg-flower" style="left: 97%; top: 65%; font-size: 55px;">🌼</div>
+    <div class="bg-flower" style="left: 25%; top: 5%; font-size: 45px;">🌻</div>
+    <div class="bg-flower" style="left: 75%; top: 8%; font-size: 50px;">🌼</div>
+    <div class="bg-flower" style="left: 30%; top: 95%; font-size: 40px;">💛</div>
+    <div class="bg-flower" style="left: 70%; top: 92%; font-size: 45px;">🌻</div>
+    <div class="bg-flower" style="left: 15%; top: 25%; font-size: 35px;">🌼</div>
+    <div class="bg-flower" style="left: 85%; top: 75%; font-size: 40px;">🌻</div>
+    <div class="bg-flower" style="left: 20%; top: 80%; font-size: 38px;">💛</div>
+    <div class="bg-flower" style="left: 80%; top: 20%; font-size: 42px;">🌼</div>
+
+    <!-- Pétalos flotantes -->
+    <div class="petal" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="petal" style="left: 20%; animation-delay: 0.3s;"></div>
+    <div class="petal" style="left: 30%; animation-delay: 0.6s;"></div>
+    <div class="petal" style="left: 40%; animation-delay: 0.9s;"></div>
+    <div class="petal" style="left: 50%; animation-delay: 1.2s;"></div>
+    <div class="petal" style="left: 60%; animation-delay: 1.5s;"></div>
+    <div class="petal" style="left: 70%; animation-delay: 1.8s;"></div>
+    <div class="petal" style="left: 80%; animation-delay: 2.1s;"></div>
+    <div class="petal" style="left: 90%; animation-delay: 2.4s;"></div>
+
+    <div class="container">
+        <!-- Arreglo floral -->
+        <div class="flower-arrangement">
+            <div style="position: relative;">
+                <!-- Florero -->
+                <div class="vase"></div>
+                <div class="vase-base"></div>
+                
+                <!-- Tallos -->
+                <div class="stems">
+                    <div class="stem" style="left: 3rem; height: 6rem;"></div>
+                    <div class="stem" style="left: 4rem; height: 7rem;"></div>
+                    <div class="stem" style="left: 5rem; height: 6.5rem;"></div>
+                    <div class="stem" style="left: 2rem; height: 7.5rem;"></div>
+                    <div class="stem" style="left: 6rem; height: 6.25rem;"></div>
+                </div>
+
+                <!-- Girasoles -->
+                <div class="sunflower-container">
+                    <!-- Girasol central -->
+                    <div class="sunflower-main">
+                        <div class="sunflower">
+                            <!-- Pétalos del girasol central -->
+                            <div class="sunflower-petal" style="transform: rotate(0deg) translateY(-12px); animation-delay: 0s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(30deg) translateY(-12px); animation-delay: 0.1s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(60deg) translateY(-12px); animation-delay: 0.2s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(90deg) translateY(-12px); animation-delay: 0.3s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(120deg) translateY(-12px); animation-delay: 0.4s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(150deg) translateY(-12px); animation-delay: 0.5s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(180deg) translateY(-12px); animation-delay: 0.6s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(210deg) translateY(-12px); animation-delay: 0.7s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(240deg) translateY(-12px); animation-delay: 0.8s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(270deg) translateY(-12px); animation-delay: 0.9s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(300deg) translateY(-12px); animation-delay: 1s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(330deg) translateY(-12px); animation-delay: 1.1s;"></div>
+                            <div class="sunflower-center"></div>
+                        </div>
+                    </div>
+
+                    <!-- Girasoles laterales -->
+                    <div class="sunflower-left">
+                        <div class="sunflower">
+                            <div class="sunflower-petal" style="transform: rotate(0deg) translateY(-8px); animation-delay: 0.15s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(36deg) translateY(-8px); animation-delay: 0.3s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(72deg) translateY(-8px); animation-delay: 0.45s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(108deg) translateY(-8px); animation-delay: 0.6s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(144deg) translateY(-8px); animation-delay: 0.75s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(180deg) translateY(-8px); animation-delay: 0.9s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(216deg) translateY(-8px); animation-delay: 1.05s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(252deg) translateY(-8px); animation-delay: 1.2s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(288deg) translateY(-8px); animation-delay: 1.35s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(324deg) translateY(-8px); animation-delay: 1.5s;"></div>
+                            <div class="sunflower-center"></div>
+                        </div>
+                    </div>
+
+                    <div class="sunflower-right">
+                        <div class="sunflower">
+                            <div class="sunflower-petal" style="transform: rotate(0deg) translateY(-8px); animation-delay: 0.12s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(36deg) translateY(-8px); animation-delay: 0.24s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(72deg) translateY(-8px); animation-delay: 0.36s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(108deg) translateY(-8px); animation-delay: 0.48s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(144deg) translateY(-8px); animation-delay: 0.6s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(180deg) translateY(-8px); animation-delay: 0.72s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(216deg) translateY(-8px); animation-delay: 0.84s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(252deg) translateY(-8px); animation-delay: 0.96s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(288deg) translateY(-8px); animation-delay: 1.08s;"></div>
+                            <div class="sunflower-petal" style="transform: rotate(324deg) translateY(-8px); animation-delay: 1.2s;"></div>
+                            <div class="sunflower-center"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lazo -->
+                <div style="position: absolute; top: 3rem; left: 50%; transform: translateX(-50%);">
+                    <div style="width: 2rem; height: 1rem; background-color: #f87171; border-radius: 50%;"></div>
+                    <div style="width: 1.5rem; height: 0.75rem; background-color: #ef4444; border-radius: 50%; margin: -4px auto 0;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Título -->
+        <div class="title">
+            <h1 id="recipient-name">Para ti</h1>
+            <p>Un arreglo especial para ti</p>
+        </div>
+
+        <!-- Mensaje -->
+        <div class="message">
+            <div class="message-box">
+                <p class="message-text" id="custom-message">
+                    Quería regalarte este arreglo de girasoles porque<br>
+                    siempre logras alegrar mis días.
+                </p>
+
+                <div class="flower-icons">
+                    <span style="animation-delay: 0s;">🌻</span>
+                    <span style="animation-delay: 0.2s;">💛</span>
+                    <span style="animation-delay: 0.4s;">🌻</span>
+                </div>
+
+                <p class="message-text" style="color: #b45309; margin-bottom: 1rem;">
+                    Espero que te gusten tanto como me gusta<br>
+                    verte sonreír.
+                </p>
+
+                <div class="signature">
+                    <p>Con cariño,</p>
+                    <p id="sender-name">Alguien especial 🌻</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón -->
+        <button class="btn" onclick="createFlowers()">🌻 Más girasoles 🌻</button>
+    </div>
+
+    <!-- Decoración de fondo -->
+    <div class="bg-decoration"></div>
+
+    <script>
+        // Función para obtener parámetros de la URL
+        function getURLParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Función para decodificar texto de URL
+        function decodeText(text) {
+            if (!text) return null;
+            return decodeURIComponent(text.replace(/\+/g, ' '));
+        }
+
+        // Personalizar contenido basado en parámetros URL
+        function personalizeContent() {
+            const nombre = decodeText(getURLParameter('nombre'));
+            const de = decodeText(getURLParameter('de'));
+            const mensaje = decodeText(getURLParameter('mensaje'));
+
+            // Actualizar nombre del destinatario
+            if (nombre) {
+                document.getElementById('recipient-name').textContent = `Para ${nombre}`;
+                document.title = `Flores Amarillas para ${nombre}`;
+            }
+
+            // Actualizar nombre del remitente
+            if (de) {
+                document.getElementById('sender-name').textContent = `${de} 🌻`;
+            }
+
+            // Actualizar mensaje personalizado
+            if (mensaje) {
+                document.getElementById('custom-message').innerHTML = `${mensaje}<br><br>🌻`;
+            }
+        }
+
+        // Función para crear flores animadas
+        function createFlowers() {
+            for(let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const flower = document.createElement('div');
+                    flower.innerHTML = '🌻';
+                    flower.style.cssText = `
+                        position: fixed;
+                        font-size: 4rem;
+                        animation: spin 2s linear;
+                        pointer-events: none;
+                        z-index: 50;
+                        left: ${Math.random() * (window.innerWidth - 50)}px;
+                        top: ${Math.random() * (window.innerHeight - 50)}px;
+                    `;
+                    document.body.appendChild(flower);
+                    setTimeout(() => flower.remove(), 4000);
+                }, i * 200);
+            }
+        }
+
+        // Función para generar URL personalizada
+        function generateURL() {
+            const baseURL = window.location.origin + window.location.pathname;
+            const nombre = prompt("¿Para quién es la dedicatoria?");
+            const de = prompt("¿De parte de quién?");
+            const mensaje = prompt("Mensaje personalizado (opcional):");
+            
+            if (nombre && de) {
+                let url = `${baseURL}?nombre=${encodeURIComponent(nombre)}&de=${encodeURIComponent(de)}`;
+                if (mensaje) {
+                    url += `&mensaje=${encodeURIComponent(mensaje)}`;
+                }
+                
+                // Copiar al portapapeles
+                navigator.clipboard.writeText(url).then(() => {
+                    alert(`¡URL copiada al portapapeles!\n\n${url}`);
+                }).catch(() => {
+                    prompt("Copia esta URL:", url);
+                });
+            }
+        }
+
+        // Inicializar personalización al cargar la página
+        document.addEventListener('DOMContentLoaded', personalizeContent);
+
+        // Agregar botón para generar URL (solo si no hay parámetros)
+        if (!getURLParameter('nombre')) {
+            const generateBtn = document.createElement('button');
+            generateBtn.textContent = '🔗 Generar enlace personalizado';
+            generateBtn.className = 'btn';
+            generateBtn.style.marginTop = '1rem';
+            generateBtn.onclick = generateURL;
+            document.querySelector('.container').appendChild(generateBtn);
+        }
+    </script>
+</body>
+</html>
